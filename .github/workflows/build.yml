@@ -1,0 +1,31 @@
+name: Build MiniGram APK
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Source Code
+      uses: actions/checkout@v4
+
+    - name: Set up Java Environment
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: 'gradle'
+
+    - name: Set Execution Permissions
+      run: chmod +x gradlew
+
+    - name: Compile APK
+      run: ./gradlew assembleDebug
+
+    - name: Save APK Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: MiniGram-Release
+        path: TMessagesProj_App/build/outputs/apk/debug/*.apk
